@@ -1,6 +1,12 @@
+---
 version: "3"
+
+networks: 
+    fiibot:
+        external: false
+
 services:
-    bot:
+    fiibot-logger:
         container_name: "fiibot-logger"
         build:
             context: "./"
@@ -9,3 +15,13 @@ services:
             - ".:/usr/src/bot"
         env_file:
             - ".env"
+        depends_on: 
+            - "db"
+        networks: 
+            - fiibot
+    db:
+        image: "postgres:13.3-alpine"
+        env_file:
+          - ".env"
+        networks: 
+          - fiibot
