@@ -25,3 +25,5 @@ services:
           - ".env"
         networks: 
           - fiibot
+        volumes: 
+          - ./postgres:/var/lib/postgresql/data
