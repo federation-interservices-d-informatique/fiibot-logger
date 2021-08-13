@@ -3,7 +3,7 @@ import {
     fiiClient,
     Command
 } from "@federation-interservices-d-informatique/fiibot-common";
-import { getLogChan, getLogChanID } from "../utils/getLogChan.js";
+import { getLogChanID } from "../utils/getLogChan.js";
 export default class PingCommand extends Command {
     constructor(client: fiiClient) {
         super(
