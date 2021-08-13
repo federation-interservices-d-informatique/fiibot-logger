@@ -21,6 +21,13 @@ export default class PingCommand extends Command {
     async run(inter: CommandInteraction): Promise<void> {
         const chan = inter.options.get("channel")?.channel;
         if (chan) {
+            if (chan.type !== "GUILD_TEXT") {
+                inter.reply({
+                    ephemeral: true,
+                    content: `Le canal <#${chan.id}> n'est pas un canal textuel mais un canal de type ${chan.type}!`
+                });
+                return;
+            }
             await this.client.dbclient.query(
                 "INSERT INTO guild_settings (id) VALUES ($1) ON CONFLICT (id) DO UPDATE SET logchan = $2",
                 [inter.guild.id.toString(), chan.id]
