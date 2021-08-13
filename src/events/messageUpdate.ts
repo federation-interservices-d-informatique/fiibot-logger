@@ -10,6 +10,7 @@ const data: EventData = {
     callback: async (oldm: Message, newm: Message): Promise<void> => {
         if (newm.partial) await newm.fetch();
         if (oldm.partial) await oldm.fetch();
+        if (newm.content === oldm.content) return;
         if (checkFIIID(oldm.content) && !checkFIIID(newm.content)) return;
         if (checkFIIID(newm.content)) {
             if (!newm.deleted && newm.deletable) newm.delete();
