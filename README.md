@@ -1,5 +1,23 @@
-# FII Bot template
+# FII Logger
 
-![GitHub](https://img.shields.io/github/license/federation-interservices-d-informatique/fiibot-template?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/federation-interservices-d-informatique/fiibot-logger?style=for-the-badge)
 
-This is a template for **all** fii bots written in TypeScript.
+Bot de logs de la fii
+
+## Commandes
+
+### Logchan
+
+#### Utilisation
+
+```
+/logchan
+```
+
+Retourne le canal de logs du bot
+
+```
+/logchan #channel
+```
+
+Set the log channel
