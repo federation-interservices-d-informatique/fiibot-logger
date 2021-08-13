@@ -1,10 +1,10 @@
 import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
-import { Guild } from "discord.js";
+import { Guild, TextChannel } from "discord.js";
 
 /**
  * Get the logchannel of a guild
  */
-export const getLogChan = async (
+export const getLogChanID = async (
     client: fiiClient,
     guild: Guild
 ): Promise<string | null> => {
@@ -17,4 +17,15 @@ export const getLogChan = async (
     } else {
         return null;
     }
+};
+/**
+ * Get the logchannel of a guild
+ */
+export const getLogChan = async (
+    client: fiiClient,
+    guild: Guild
+): Promise<TextChannel | null> => {
+    const id = await getLogChanID(client, guild);
+    if (!id) return null;
+    return (await client.channels.fetch(id)) as TextChannel;
 };
