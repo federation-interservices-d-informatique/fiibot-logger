@@ -3,6 +3,7 @@ import {
     fiiClient,
     Command
 } from "@federation-interservices-d-informatique/fiibot-common";
+import { getLogChan } from "../utils/getLogChan.js";
 export default class PingCommand extends Command {
     constructor(client: fiiClient) {
         super(
@@ -41,14 +42,11 @@ export default class PingCommand extends Command {
             );
             inter.reply(`Nouveau canal de logs: ${chan.toString()}`);
         } else {
-            const row = await this.client.dbclient.query(
-                "SELECT logchan FROM guild_settings WHERE id = $1",
-                [inter.guildId]
-            );
-            if (!row.rows[0]) {
+            const chan = getLogChan(this.client, inter.guild);
+            if (!chan) {
                 inter.reply("Aucun canal de logs n'a été défini!");
             } else {
-                inter.reply(`Le canal de logs est <#${row.rows[0]}>`);
+                inter.reply(`Le canal de logs est <#${chan}>`);
             }
         }
     }
