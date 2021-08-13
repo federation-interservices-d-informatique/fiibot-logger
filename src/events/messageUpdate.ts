@@ -1,6 +1,7 @@
 import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
 import { Message } from "discord.js";
 import { EventData } from "../typings/eventData";
+import { checkFIIID } from "../utils/checkFIIID.js";
 import { getLogChan } from "../utils/getLogChan.js";
 
 const data: EventData = {
@@ -13,6 +14,11 @@ const data: EventData = {
             newm.author.client as fiiClient,
             newm.guild
         );
+        if (checkFIIID(oldm.content) && !checkFIIID(newm.content)) return;
+        if (checkFIIID(newm.content)) {
+            if (!newm.deleted && newm.deletable) newm.delete();
+            return;
+        }
         if (!logchan) return;
         logchan.send({
             embeds: [
