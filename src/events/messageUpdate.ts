@@ -10,15 +10,15 @@ const data: EventData = {
     callback: async (oldm: Message, newm: Message): Promise<void> => {
         if (newm.partial) await newm.fetch();
         if (oldm.partial) await oldm.fetch();
-        const logchan = await getLogChan(
-            newm.author.client as fiiClient,
-            newm.guild
-        );
         if (checkFIIID(oldm.content) && !checkFIIID(newm.content)) return;
         if (checkFIIID(newm.content)) {
             if (!newm.deleted && newm.deletable) newm.delete();
             return;
         }
+        const logchan = await getLogChan(
+            newm.author.client as fiiClient,
+            newm.guild
+        );
         if (!logchan) return;
         logchan.send({
             embeds: [
