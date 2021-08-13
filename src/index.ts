@@ -20,3 +20,12 @@ const client = new fiiClient(
         user: process.env.POSTGRES_USER
     }
 );
+
+client.on("ready", async () => {
+    await client.dbclient.query(`
+        CREATE TABLE IF NOT EXISTS guild_settings (
+            id VARCHAR(20) PRIMARY KEY NOT NULL,
+            logchan VARCHAR(20)
+        )
+    `);
+});
