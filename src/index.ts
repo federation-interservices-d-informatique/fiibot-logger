@@ -1,10 +1,12 @@
 import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
+import { readdir } from "fs/promises";
+import { EventData } from "./typings/eventData.js";
 import { getDirname } from "./utils/getdirname.js";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const client = new fiiClient(
     {
-        intents: ["GUILDS"]
+        intents: ["GUILDS", "GUILD_MESSAGES"]
     },
     {
         commandManagerSettings: {
@@ -28,4 +30,11 @@ client.on("ready", async () => {
             logchan VARCHAR(20)
         )
     `);
+    for (const file of await readdir(`${getDirname(import.meta.url)}/events`)) {
+        if (!file.endsWith(".js")) continue;
+        const data: EventData = (
+            await import(`${getDirname(import.meta.url)}/events/${file}`)
+        ).default;
+        client.eventManager.registerEvent(data.name, data.type, data.callback);
+    }
 });
