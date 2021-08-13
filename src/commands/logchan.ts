@@ -20,7 +20,8 @@ export default class PingCommand extends Command {
                 ]
             },
             {
-                userPermissions: ["ADMINISTRATOR"]
+                userPermissions: ["ADMINISTRATOR"],
+                guildOnly: true
             }
         );
     }
