@@ -5,18 +5,24 @@ import {
 } from "@federation-interservices-d-informatique/fiibot-common";
 export default class PingCommand extends Command {
     constructor(client: fiiClient) {
-        super(client, {
-            name: "logchan",
-            description: "Changer le canal des logs",
-            options: [
-                {
-                    name: "channel",
-                    type: "CHANNEL",
-                    description: "Le nouveau canal de logs",
-                    required: false
-                }
-            ]
-        });
+        super(
+            client,
+            {
+                name: "logchan",
+                description: "Changer le canal des logs",
+                options: [
+                    {
+                        name: "channel",
+                        type: "CHANNEL",
+                        description: "Le nouveau canal de logs",
+                        required: false
+                    }
+                ]
+            },
+            {
+                userPermissions: ["ADMINISTRATOR"]
+            }
+        );
     }
     async run(inter: CommandInteraction): Promise<void> {
         const chan = inter.options.get("channel")?.channel;
