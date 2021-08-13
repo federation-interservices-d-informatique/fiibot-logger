@@ -6,7 +6,8 @@ import { getDirname } from "./utils/getdirname.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const client = new fiiClient(
     {
-        intents: ["GUILDS", "GUILD_MEMBERS"]
+        intents: ["GUILDS", "GUILD_MEMBERS"],
+        partials: ["GUILD_MEMBER", "USER"]
     },
     {
         commandManagerSettings: {

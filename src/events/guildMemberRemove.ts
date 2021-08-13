@@ -4,10 +4,10 @@ import { EventData } from "../typings/eventData";
 import { getLogChan } from "../utils/getLogChan.js";
 
 const data: EventData = {
-    name: "lognewmembers",
-    type: "guildMemberAdd",
+    name: "logremovedmembermembers",
+    type: "guildMemberRemove",
     callback: async (member: GuildMember): Promise<void> => {
-        if (member.partial) await member.fetch();
+        if (member.user.partial) await member.user.fetch();
         const logchan = await getLogChan(
             member.client as fiiClient,
             member.guild
@@ -16,23 +16,22 @@ const data: EventData = {
         logchan.send({
             embeds: [
                 {
-                    title: "Un(e) utilisateur/trice a rejoint le serveur!",
-                    description: `${member.user.username} a rejoint le serveur`,
-                    color: "GREEN",
+                    title: `Ohh... ${member.user.username} vient de quitter le serveur...`,
+                    color: "RED",
+                    author: {
+                        iconURL: member.user.avatarURL(),
+                        name: member.user.username
+                    },
                     fields: [
                         {
-                            name: "Date de création de son compte:",
+                            name: "Création du compte",
                             value: member.user.createdAt.toString()
                         },
                         {
                             name: "ID",
                             value: member.user.id
                         }
-                    ],
-                    author: {
-                        iconURL: member.user.avatarURL(),
-                        name: member.user.username
-                    }
+                    ]
                 }
             ]
         });
