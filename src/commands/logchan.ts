@@ -38,11 +38,11 @@ export default class PingCommand extends Command {
             }
             await this.client.dbclient.query(
                 "INSERT INTO guild_settings (id) VALUES ($1) ON CONFLICT (id) DO UPDATE SET logchan = $2",
-                [inter.guild.id.toString(), chan.id]
+                [inter.guildId, chan.id]
             );
             inter.reply(`Nouveau canal de logs: ${chan.toString()}`);
         } else {
-            const chan = getLogChanID(this.client, inter.guild);
+            const chan = await getLogChanID(this.client, inter.guild);
             if (!chan) {
                 inter.reply("Aucun canal de logs n'a été défini!");
             } else {
