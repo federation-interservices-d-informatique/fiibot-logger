@@ -8,33 +8,41 @@ const data: EventData = {
     type: "guildMemberRemove",
     callback: async (member: GuildMember): Promise<void> => {
         if (member.user.partial) await member.user.fetch();
+        if (member.user.id === member.client.user.id) return;
         const logchan = await getLogChan(
             member.client as fiiClient,
             member.guild
         );
         if (!logchan) return;
-        logchan.send({
-            embeds: [
-                {
-                    title: `Ohh... ${member.user.username} vient de quitter le serveur...`,
-                    color: "RED",
-                    author: {
-                        iconURL: member.user.avatarURL(),
-                        name: member.user.username
-                    },
-                    fields: [
-                        {
-                            name: "Création du compte",
-                            value: member.user.createdAt.toString()
+        try {
+            await logchan.send({
+                embeds: [
+                    {
+                        title: `Ohh... ${member.user.username} vient de quitter le serveur...`,
+                        color: "RED",
+                        author: {
+                            iconURL: member.user.avatarURL(),
+                            name: member.user.username
                         },
-                        {
-                            name: "ID",
-                            value: member.user.id
-                        }
-                    ]
-                }
-            ]
-        });
+                        fields: [
+                            {
+                                name: "Création du compte",
+                                value: member.user.createdAt.toString()
+                            },
+                            {
+                                name: "ID",
+                                value: member.user.id
+                            }
+                        ]
+                    }
+                ]
+            });
+        } catch (e) {
+            (member.client as fiiClient).logger.error(
+                `Can't send logs in ${member.guild.name} (${member.guild.id})`,
+                "guildMemberRemove"
+            );
+        }
     }
 };
 export default data;
