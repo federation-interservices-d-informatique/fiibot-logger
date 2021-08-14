@@ -18,10 +18,7 @@ module.exports =  {
         "prettier"
     ],
     "rules": {
-        "indent": [
-            "warn",
-            4
-        ],
+        "indent": "off",
         "linebreak-style": [
             "error",
             "unix"
@@ -36,4 +33,4 @@ module.exports =  {
         ],
         "prettier/prettier": 1
     }
-}
+};
