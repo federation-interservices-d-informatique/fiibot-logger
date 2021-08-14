@@ -13,8 +13,8 @@ export default class PingCommand extends Command {
                 description: "Changer le canal des logs",
                 options: [
                     {
-                        name: "channel",
                         type: "CHANNEL",
+                        name: "channel",
                         description: "Le nouveau canal de logs",
                         required: false
                     }

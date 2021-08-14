@@ -49,17 +49,24 @@ const data: EventData = {
                   }`
               })
             : "";
-        logchan.send({
-            embeds: [
-                {
-                    title: "Un role a été modifié!",
-                    description: `Le role ${now.name} a été modifié!`,
-                    color: now.hexColor,
-                    timestamp: new Date(),
-                    fields: fields
-                }
-            ]
-        });
+        try {
+            await logchan.send({
+                embeds: [
+                    {
+                        title: "Un role a été modifié!",
+                        description: `Le role ${now.name} a été modifié!`,
+                        color: now.hexColor,
+                        timestamp: new Date(),
+                        fields: fields
+                    }
+                ]
+            });
+        } catch (e) {
+            (now.client as fiiClient).logger.error(
+                `Can't send logs in ${now.guild.name} (${now.guild.id})`,
+                "roleUpdate"
+            );
+        }
     }
 };
 export default data;

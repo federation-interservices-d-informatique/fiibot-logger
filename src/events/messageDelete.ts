@@ -16,25 +16,32 @@ const data: EventData = {
             msg.guild
         );
         if (!logchan) return;
-        logchan.send({
-            embeds: [
-                {
-                    description: `**Un message de ${msg.author} dans ${msg.channel} a été supprimé**`,
-                    color: "RED",
-                    footer: {
-                        icon_url: `${msg.guild.iconURL({ dynamic: true })}`,
-                        text: `Logs de ${msg.guild.name}`
-                    },
-                    timestamp: new Date(),
-                    fields: [
-                        {
-                            name: "Ancien contenu:",
-                            value: `\`\`\`${msg.content}\`\`\``
-                        }
-                    ]
-                }
-            ]
-        });
+        try {
+            await logchan.send({
+                embeds: [
+                    {
+                        description: `**Un message de ${msg.author} dans ${msg.channel} a été supprimé**`,
+                        color: "RED",
+                        footer: {
+                            icon_url: `${msg.guild.iconURL({ dynamic: true })}`,
+                            text: `Logs de ${msg.guild.name}`
+                        },
+                        timestamp: new Date(),
+                        fields: [
+                            {
+                                name: "Ancien contenu:",
+                                value: `\`\`\`${msg.content}\`\`\``
+                            }
+                        ]
+                    }
+                ]
+            });
+        } catch (e) {
+            (msg.client as fiiClient).logger.error(
+                `Can't send logs in ${msg.guild.name} (${msg.guild.id})`,
+                "messageDelete"
+            );
+        }
     }
 };
 export default data;
