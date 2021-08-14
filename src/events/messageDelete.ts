@@ -8,7 +8,7 @@ const data: EventData = {
     name: "logmessagedelete",
     type: "messageDelete",
     callback: async (msg: Message): Promise<void> => {
-        if (msg.partial) await msg.fetch();
+        if (msg.partial) return;
         if (checkFIIID(msg.content)) return;
 
         const logchan = await getLogChan(
