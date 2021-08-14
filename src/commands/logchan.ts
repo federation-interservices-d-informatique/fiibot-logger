@@ -37,7 +37,7 @@ export default class PingCommand extends Command {
                 return;
             }
             await this.client.dbclient.query(
-                "INSERT INTO guild_settings (id) VALUES ($1) ON CONFLICT (id) DO UPDATE SET logchan = $2",
+                "INSERT INTO guild_settings (id, logchan) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET logchan = $2",
                 [inter.guildId, chan.id]
             );
             inter.reply(`Nouveau canal de logs: ${chan.toString()}`);
