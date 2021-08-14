@@ -5,18 +5,11 @@ import {
 } from "@federation-interservices-d-informatique/fiibot-common";
 export default class PingCommand extends Command {
     constructor(client: fiiClient) {
-        super(
-            client,
-            {
-                name: "botinfo",
-                description: "Obtenir les informations du bot",
-                options: []
-            },
-            {
-                userPermissions: ["ADMINISTRATOR"],
-                guildOnly: true
-            }
-        );
+        super(client, {
+            name: "botinfo",
+            description: "Obtenir les informations du bot",
+            options: []
+        });
     }
     async run(inter: CommandInteraction): Promise<void> {
         inter.reply({
