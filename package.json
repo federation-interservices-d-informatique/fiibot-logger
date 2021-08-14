@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "@federation-interservices-d-informatique/fiibot-common": "^2.2.1",
-    "discord.js": "^13.0.1"
+    "discord.js": "^13.1.0"
   }
 }
