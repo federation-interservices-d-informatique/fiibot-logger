@@ -13,7 +13,7 @@ export const getLogChanID = async (
         [guild.id]
     );
     if (res.rows[0]) {
-        return res.rows[0].toString();
+        return res.rows[0].logchan;
     } else {
         return null;
     }
