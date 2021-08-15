@@ -1,7 +1,7 @@
 ---
 version: "3"
 
-networks: 
+networks:
     fiibot:
         external: false
 
@@ -15,15 +15,15 @@ services:
             - ".:/usr/src/bot"
         env_file:
             - ".env"
-        depends_on: 
+        depends_on:
             - "db"
-        networks: 
+        networks:
             - fiibot
     db:
         image: "postgres:13.3-alpine"
         env_file:
-          - ".env"
-        networks: 
-          - fiibot
-        volumes: 
-          - ./postgres:/var/lib/postgresql/data
+            - ".env"
+        networks:
+            - fiibot
+        volumes:
+            - ./postgres:/var/lib/postgresql/data

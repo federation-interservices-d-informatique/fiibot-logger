@@ -38,7 +38,14 @@ export default class PingCommand extends Command {
             }
             await this.client.dbclient.query(
                 "INSERT INTO guild_settings (id, logchan) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET logchan = $2",
-                [inter.guildId, chan.id]
+                [inter.guildId, chan.id],
+                (err) => {
+                    if (err) {
+                        inter.reply(
+                            `Impossible de joindre la base de données: ${err}`
+                        );
+                    }
+                }
             );
             inter.reply(`Nouveau canal de logs: ${chan.toString()}`);
         } else {

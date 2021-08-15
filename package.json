@@ -40,7 +40,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@federation-interservices-d-informatique/fiibot-common": "^2.2.1",
+    "@federation-interservices-d-informatique/fiibot-common": "^2.3.1",
     "discord.js": "^13.1.0"
   }
 }
