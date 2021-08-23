@@ -22,13 +22,19 @@ export default class PingCommand extends Command {
         const chan = await getLogChanID(this.client, inter.guild);
 
         if (!chan) {
-            inter.reply("Aucun canal de logs n'a été défini!");
+            inter.reply({
+                ephemeral: true,
+                content: "Aucun canal de logs n'a été défini!"
+            });
         } else {
             await this.client.dbclient.query(
                 "UPDATE guild_settings SET logchan = NULL WHERE id = $1",
                 [inter.guildId]
             );
-            inter.reply(`Terminé. Le canal de logs était <#${chan}>`);
+            inter.reply({
+                ephemeral: true,
+                content: `Terminé. Le canal de logs était <#${chan}>`
+            });
         }
     }
 }

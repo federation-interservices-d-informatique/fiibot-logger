@@ -41,19 +41,29 @@ export default class PingCommand extends Command {
                 [inter.guildId, chan.id],
                 (err) => {
                     if (err) {
-                        inter.reply(
-                            `Impossible de joindre la base de données: ${err}`
-                        );
+                        inter.reply({
+                            ephemeral: true,
+                            content: `Impossible de joindre la base de données: ${err}`
+                        });
                     }
                 }
             );
-            inter.reply(`Nouveau canal de logs: ${chan.toString()}`);
+            inter.reply({
+                ephemeral: true,
+                content: `Nouveau canal de logs: ${chan.toString()}`
+            });
         } else {
             const chan = await getLogChanID(this.client, inter.guild);
             if (!chan) {
-                inter.reply("Aucun canal de logs n'a été défini!");
+                inter.reply({
+                    ephemeral: true,
+                    content: "Aucun canal de logs n'a été défini!"
+                });
             } else {
-                inter.reply(`Le canal de logs est <#${chan}>`);
+                inter.reply({
+                    ephemeral: true,
+                    content: `Le canal de logs est <#${chan}>`
+                });
             }
         }
     }
