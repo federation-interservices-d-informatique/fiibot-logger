@@ -23,7 +23,7 @@ const client = new fiiClient(
             password: process.env.POSTGRES_PASSWORD,
             user: process.env.POSTGRES_USER
         },
-        tableName: "fiibot-logger-pskv"
+        tableName: "fiibotloggerpskv"
     }
 );
 
