@@ -17,20 +17,17 @@ const client = new fiiClient(
         token: process.env.BOT_TOKEN
     },
     {
-        host: process.env.DB_HOST,
-        database: process.env.POSTGRES_DB,
-        password: process.env.POSTGRES_PASSWORD,
-        user: process.env.POSTGRES_USER
+        dbConfig: {
+            host: process.env.DB_HOST,
+            database: process.env.POSTGRES_DB,
+            password: process.env.POSTGRES_PASSWORD,
+            user: process.env.POSTGRES_USER
+        },
+        tableName: "fiibot-logger-pskv"
     }
 );
 
 client.on("ready", async () => {
-    await client.dbclient.query(`
-        CREATE TABLE IF NOT EXISTS guild_settings (
-            id VARCHAR(20) PRIMARY KEY NOT NULL,
-            logchan VARCHAR(20)
-        )
-    `);
     for (const file of await readdir(`${getDirname(import.meta.url)}/events`)) {
         if (!file.endsWith(".js")) continue;
         const data: EventData = (

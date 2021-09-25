@@ -8,15 +8,7 @@ export const getLogChanID = async (
     client: fiiClient,
     guild: Guild
 ): Promise<string | null> => {
-    const res = await client.dbclient.query(
-        "SELECT logchan FROM guild_settings WHERE id = $1",
-        [guild.id]
-    );
-    if (res.rows[0]) {
-        return res.rows[0].logchan;
-    } else {
-        return null;
-    }
+    return await client.dbclient.get<string>(`${guild.id}-logchan`);
 };
 /**
  * Get the logchannel of a guild

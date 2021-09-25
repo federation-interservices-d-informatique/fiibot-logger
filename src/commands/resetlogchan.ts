@@ -27,10 +27,7 @@ export default class PingCommand extends Command {
                 content: "Aucun canal de logs n'a été défini!"
             });
         } else {
-            await this.client.dbclient.query(
-                "UPDATE guild_settings SET logchan = NULL WHERE id = $1",
-                [inter.guildId]
-            );
+            await this.client.dbclient.delete(`${inter.guildId}-logchan`);
             inter.reply({
                 ephemeral: true,
                 content: `Terminé. Le canal de logs était <#${chan}>`
