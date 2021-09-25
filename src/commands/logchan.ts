@@ -36,18 +36,7 @@ export default class PingCommand extends Command {
                 });
                 return;
             }
-            await this.client.dbclient.query(
-                "INSERT INTO guild_settings (id, logchan) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET logchan = $2",
-                [inter.guildId, chan.id],
-                (err) => {
-                    if (err) {
-                        inter.reply({
-                            ephemeral: true,
-                            content: `Impossible de joindre la base de données: ${err}`
-                        });
-                    }
-                }
-            );
+            await this.client.dbclient.set(`${inter.guildId}-logchan`, chan.id);
             inter.reply({
                 ephemeral: true,
                 content: `Nouveau canal de logs: ${chan.toString()}`

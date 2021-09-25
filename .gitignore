@@ -11,3 +11,6 @@ node_modules/
 .env
 # Database
 postgres/
+
+.temp
+.cache
