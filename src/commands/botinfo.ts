@@ -25,10 +25,6 @@ export default class PingCommand extends Command {
                         {
                             name: "License",
                             value: "Ce projet est sous license [MIT](https://github.com/federation-interservices-d-informatique/fiibot-logger/blob/main/LICENSE)"
-                        },
-                        {
-                            name: "Auteurs",
-                            value: "Fait avec ❤️ par [Woomymy](https://github.com/Woomymy) avec l'aide des membres de la [FII](https://discord.gg/RyGNjns)"
                         }
                     ]
                 }
