@@ -21,7 +21,8 @@ export default class PingCommand extends Command {
                                 type: "CHANNEL",
                                 name: "salon",
                                 description: "Le salon de logs",
-                                required: true
+                                required: true,
+                                channelTypes: ["GUILD_TEXT"]
                             }
                         ]
                     },
@@ -47,13 +48,6 @@ export default class PingCommand extends Command {
         if (inter.options.getSubcommand() === "enable") {
             const chan = inter.options.get("salon")?.channel;
 
-            if (chan.type !== "GUILD_TEXT") {
-                inter.reply({
-                    ephemeral: true,
-                    content: `Le canal <#${chan.id}> n'est pas un canal textuel mais un canal de type ${chan.type}!`
-                });
-                return;
-            }
             await this.client.dbclient.set(`${inter.guildId}-logchan`, chan.id);
             inter.reply({
                 ephemeral: true,
