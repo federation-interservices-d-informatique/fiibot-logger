@@ -8,8 +8,16 @@ const data: EventData = {
     name: "logmessageupdates",
     type: "messageUpdate",
     callback: async (oldm: Message, newm: Message): Promise<void> => {
-        if (newm.partial) await newm.fetch();
-        if (oldm.partial) await oldm.fetch();
+        try {
+            if (newm.partial) await newm.fetch();
+            if (oldm.partial) await oldm.fetch();
+        } catch (e) {
+            (oldm.client as fiiClient)?.logger.error(
+                "Failed to fetch messages!",
+                "MESSAGEEUPDATE"
+            );
+            return;
+        }
         if (!oldm.content || !newm.content) return;
         if (newm.content === oldm.content) return;
         if (checkFIIID(oldm.content) && !checkFIIID(newm.content)) return;
