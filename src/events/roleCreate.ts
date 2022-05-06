@@ -28,7 +28,7 @@ const data: EventData = {
             });
         } catch (e) {
             (role.client as fiiClient).logger.error(
-                `Can't send logs in ${role.guild.name} (${role.guild.id})`,
+                `Can't send logs in ${role.guild.name} (${role.guild.id}): ${e}`,
                 "roleCreate"
             );
         }

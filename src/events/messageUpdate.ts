@@ -13,7 +13,7 @@ const data: EventData = {
             if (oldm.partial) await oldm.fetch();
         } catch (e) {
             (oldm.client as fiiClient)?.logger.error(
-                "Failed to fetch messages!",
+                `Failed to fetch messages!: ${e}`,
                 "MESSAGEEUPDATE"
             );
             return;
@@ -58,7 +58,7 @@ const data: EventData = {
             });
         } catch (e) {
             (newm.client as fiiClient).logger.error(
-                `Can't send logs in ${newm.guild.name} (${newm.guild.id})`,
+                `Can't send logs in ${newm.guild.name} (${newm.guild.id}): ${e}`,
                 "messageUpdate"
             );
         }

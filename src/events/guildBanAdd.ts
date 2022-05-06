@@ -23,7 +23,7 @@ const data: EventData = {
             event = log.entries.first();
         } catch (e) {
             (member.client as fiiClient).logger.error(
-                `Can't fetch audit logs of ${member.guild.name} (${member.guild.id})`,
+                `Can't fetch audit logs of ${member.guild.name} (${member.guild.id}): ${e}`,
                 "guildBanAdd"
             );
         }
@@ -54,7 +54,7 @@ const data: EventData = {
             });
         } catch (e) {
             (member.client as fiiClient).logger.error(
-                `Can't send logs in ${member.guild.name} (${member.guild.id})`,
+                `Can't send logs in ${member.guild.name} (${member.guild.id}): ${e}`,
                 "guildBanAdd"
             );
         }
