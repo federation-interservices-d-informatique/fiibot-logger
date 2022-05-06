@@ -1,0 +1,29 @@
+version: "3"
+
+networks:
+  fiibot-logger:
+    external: false
+
+services:
+  bot:
+    build:
+      context: ".."
+      dockerfile: "./docker/Dockerfile.dev"
+    volumes:
+      - "..:/usr/src/bot"
+    networks:
+      - fiibot-logger
+    env_file:
+      - "../.env"
+    tty: true
+  db:
+    image: "postgres:14.2-alpine"
+    env_file:
+      - "../.env"
+    volumes:
+      - ../db:/var/lib/postgresql/data
+    networks:
+      - fiibot-logger
+    ports:
+      - "5432:5432"
+
