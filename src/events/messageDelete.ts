@@ -38,7 +38,7 @@ const data: EventData = {
             });
         } catch (e) {
             (msg.client as fiiClient).logger.error(
-                `Can't send logs in ${msg.guild.name} (${msg.guild.id})`,
+                `Can't send logs in ${msg.guild.name} (${msg.guild.id}): ${e}`,
                 "messageDelete"
             );
         }

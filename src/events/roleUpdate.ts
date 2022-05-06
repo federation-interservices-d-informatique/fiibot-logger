@@ -63,7 +63,7 @@ const data: EventData = {
             });
         } catch (e) {
             (now.client as fiiClient).logger.error(
-                `Can't send logs in ${now.guild.name} (${now.guild.id})`,
+                `Can't send logs in ${now.guild.name} (${now.guild.id}): ${e}`,
                 "roleUpdate"
             );
         }
