@@ -1,10 +1,12 @@
-import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
-import { Message } from "discord.js";
-import { EventData } from "../typings/eventData";
+import {
+    clientEvent,
+    FiiClient
+} from "@federation-interservices-d-informatique/fiibot-common";
+import { Colors, Message } from "discord.js";
 import { checkFIIID } from "../utils/checkFIIID.js";
 import { getLogChan } from "../utils/getLogChan.js";
 
-const data: EventData = {
+export default clientEvent({
     name: "logmessagedelete",
     type: "messageDelete",
     callback: async (msg: Message): Promise<void> => {
@@ -12,7 +14,7 @@ const data: EventData = {
         if (checkFIIID(msg.content)) return;
 
         const logchan = await getLogChan(
-            msg.author.client as fiiClient,
+            msg.author.client as FiiClient,
             msg.guild
         );
         if (!logchan) return;
@@ -21,12 +23,12 @@ const data: EventData = {
                 embeds: [
                     {
                         description: `**Un message de ${msg.author} dans ${msg.channel} a été supprimé**`,
-                        color: "RED",
+                        color: Colors.Red,
                         footer: {
-                            icon_url: `${msg.guild.iconURL({ dynamic: true })}`,
+                            icon_url: `${msg.guild.iconURL()}`,
                             text: `Logs de ${msg.guild.name}`
                         },
-                        timestamp: new Date(),
+                        timestamp: new Date().toISOString(),
                         fields: [
                             {
                                 name: "Ancien contenu:",
@@ -37,11 +39,10 @@ const data: EventData = {
                 ]
             });
         } catch (e) {
-            (msg.client as fiiClient).logger.error(
+            (msg.client as FiiClient).logger.error(
                 `Can't send logs in ${msg.guild.name} (${msg.guild.id}): ${e}`,
                 "messageDelete"
             );
         }
     }
-};
-export default data;
+});
