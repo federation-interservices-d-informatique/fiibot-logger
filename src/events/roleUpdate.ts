@@ -1,13 +1,15 @@
-import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
+import {
+    clientEvent,
+    FiiClient
+} from "@federation-interservices-d-informatique/fiibot-common";
 import { Role } from "discord.js";
-import { EventData } from "../typings/eventData";
 import { getLogChan } from "../utils/getLogChan.js";
 
-const data: EventData = {
+export default clientEvent({
     name: "logupdatedroles",
     type: "roleUpdate",
     callback: async (old: Role, now: Role): Promise<void> => {
-        const logchan = await getLogChan(now.client as fiiClient, now.guild);
+        const logchan = await getLogChan(now.client as FiiClient, now.guild);
         if (!logchan) return;
         const fields = [];
         old.name != now.name
@@ -55,18 +57,17 @@ const data: EventData = {
                     {
                         title: "Un role a été modifié!",
                         description: `Le role ${now.name} a été modifié!`,
-                        color: now.hexColor,
-                        timestamp: new Date(),
+                        color: now.color,
+                        timestamp: new Date().toISOString(),
                         fields: fields
                     }
                 ]
             });
         } catch (e) {
-            (now.client as fiiClient).logger.error(
+            (now.client as FiiClient).logger.error(
                 `Can't send logs in ${now.guild.name} (${now.guild.id}): ${e}`,
                 "roleUpdate"
             );
         }
     }
-};
-export default data;
+});

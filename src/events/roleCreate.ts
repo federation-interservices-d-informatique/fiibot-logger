@@ -1,13 +1,15 @@
-import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
+import {
+    clientEvent,
+    FiiClient
+} from "@federation-interservices-d-informatique/fiibot-common";
 import { Role } from "discord.js";
-import { EventData } from "../typings/eventData";
 import { getLogChan } from "../utils/getLogChan.js";
 
-const data: EventData = {
+export default clientEvent({
     name: "logcreatedroles",
     type: "roleCreate",
     callback: async (role: Role): Promise<void> => {
-        const logchan = await getLogChan(role.client as fiiClient, role.guild);
+        const logchan = await getLogChan(role.client as FiiClient, role.guild);
         if (!logchan) return;
         try {
             await logchan.send({
@@ -21,17 +23,16 @@ const data: EventData = {
                                 name: "Permissions:"
                             }
                         ],
-                        color: role.hexColor,
-                        timestamp: new Date()
+                        color: role.color,
+                        timestamp: new Date().toISOString()
                     }
                 ]
             });
         } catch (e) {
-            (role.client as fiiClient).logger.error(
+            (role.client as FiiClient).logger.error(
                 `Can't send logs in ${role.guild.name} (${role.guild.id}): ${e}`,
                 "roleCreate"
             );
         }
     }
-};
-export default data;
+});
