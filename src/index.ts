@@ -1,19 +1,36 @@
-import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
-import { readdir } from "fs/promises";
-import { EventData } from "./typings/eventData.js";
-import { getDirname } from "./utils/getdirname.js";
+import {
+    FiiClient,
+    getDirname
+} from "@federation-interservices-d-informatique/fiibot-common";
+import { GatewayIntentBits, Partials } from "discord.js";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const client = new fiiClient(
+new FiiClient(
     {
-        intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES"],
-        partials: ["GUILD_MEMBER", "USER", "MESSAGE"]
+        intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.MessageContent,
+            GatewayIntentBits.GuildBans,
+            GatewayIntentBits.GuildMessages
+        ],
+        partials: [
+            Partials.Channel,
+            Partials.Message,
+            Partials.GuildMember,
+            Partials.User
+        ]
     },
     {
-        commandManagerSettings: {
-            commandsPath: [`${getDirname(import.meta.url)}/commands`]
+        managersSettings: {
+            interactionsManagerSettings: {
+                includeDefaultInteractions: true,
+                interactionsPaths: [`${getDirname(import.meta.url)}/commands`]
+            },
+            eventsManagerSettings: {
+                eventsPaths: [`${getDirname(import.meta.url)}/events`]
+            }
         },
-        owners: process.env.OWNERS.split(",").map((o) => parseInt(o)),
         token: process.env.BOT_TOKEN
     },
     {
@@ -26,13 +43,3 @@ const client = new fiiClient(
         tableName: "fiibotloggerpskv"
     }
 );
-
-client.on("ready", async () => {
-    for (const file of await readdir(`${getDirname(import.meta.url)}/events`)) {
-        if (!file.endsWith(".js")) continue;
-        const data: EventData = (
-            await import(`${getDirname(import.meta.url)}/events/${file}`)
-        ).default;
-        client.eventManager.registerEvent(data.name, data.type, data.callback);
-    }
-});

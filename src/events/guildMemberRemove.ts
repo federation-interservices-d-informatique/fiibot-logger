@@ -1,16 +1,18 @@
-import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
-import { GuildMember } from "discord.js";
-import { EventData } from "../typings/eventData";
+import {
+    clientEvent,
+    FiiClient
+} from "@federation-interservices-d-informatique/fiibot-common";
+import { Colors, GuildMember } from "discord.js";
 import { getLogChan } from "../utils/getLogChan.js";
 
-const data: EventData = {
+export default clientEvent({
     name: "logremovedmembermembers",
     type: "guildMemberRemove",
     callback: async (member: GuildMember): Promise<void> => {
         if (member.user.partial) await member.user.fetch();
         if (member.user.id === member.client.user.id) return;
         const logchan = await getLogChan(
-            member.client as fiiClient,
+            member.client as FiiClient,
             member.guild
         );
         if (!logchan) return;
@@ -19,9 +21,9 @@ const data: EventData = {
                 embeds: [
                     {
                         title: `Ohh... ${member.user.username} vient de quitter le serveur...`,
-                        color: "RED",
+                        color: Colors.Red,
                         author: {
-                            iconURL: member.user.avatarURL(),
+                            icon_url: member.user.avatarURL(),
                             name: member.user.username
                         },
                         fields: [
@@ -38,11 +40,10 @@ const data: EventData = {
                 ]
             });
         } catch (e) {
-            (member.client as fiiClient).logger.error(
+            (member.client as FiiClient).logger.error(
                 `Can't send logs in ${member.guild.name} (${member.guild.id}): ${e}`,
                 "guildMemberRemove"
             );
         }
     }
-};
-export default data;
+});

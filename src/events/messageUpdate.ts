@@ -1,10 +1,12 @@
-import { fiiClient } from "@federation-interservices-d-informatique/fiibot-common";
-import { Message } from "discord.js";
-import { EventData } from "../typings/eventData";
+import {
+    clientEvent,
+    FiiClient
+} from "@federation-interservices-d-informatique/fiibot-common";
+import { Colors, Message } from "discord.js";
 import { checkFIIID } from "../utils/checkFIIID.js";
 import { getLogChan } from "../utils/getLogChan.js";
 
-const data: EventData = {
+export default clientEvent({
     name: "logmessageupdates",
     type: "messageUpdate",
     callback: async (oldm: Message, newm: Message): Promise<void> => {
@@ -12,7 +14,7 @@ const data: EventData = {
             if (newm.partial) await newm.fetch();
             if (oldm.partial) await oldm.fetch();
         } catch (e) {
-            (oldm.client as fiiClient)?.logger.error(
+            (oldm.client as FiiClient)?.logger.error(
                 `Failed to fetch messages!: ${e}`,
                 "MESSAGEEUPDATE"
             );
@@ -22,11 +24,19 @@ const data: EventData = {
         if (newm.content === oldm.content) return;
         if (checkFIIID(oldm.content) && !checkFIIID(newm.content)) return;
         if (checkFIIID(newm.content)) {
-            if (!newm.deleted && newm.deletable) newm.delete();
+            if (newm.deletable)
+                try {
+                    newm.delete();
+                } catch (e) {
+                    (oldm.client as FiiClient).logger.error(
+                        `Unable to delete ${newm.id} (${newm.content}, but it contains an ID!)`,
+                        "messageUpdate"
+                    );
+                }
             return;
         }
         const logchan = await getLogChan(
-            newm.author.client as fiiClient,
+            newm.author.client as FiiClient,
             newm.guild
         );
         if (!logchan) return;
@@ -35,14 +45,12 @@ const data: EventData = {
                 embeds: [
                     {
                         description: `**Un message de ${newm.author} dans ${newm.channel} a été modifié**`,
-                        color: "RED",
+                        color: Colors.Red,
                         footer: {
-                            icon_url: `${newm.guild.iconURL({
-                                dynamic: true
-                            })}`,
+                            icon_url: `${newm.guild.iconURL({})}`,
                             text: `Logs de ${newm.guild.name}`
                         },
-                        timestamp: new Date(),
+                        timestamp: new Date().toISOString(),
                         fields: [
                             {
                                 name: "Ancien contenu:",
@@ -57,11 +65,10 @@ const data: EventData = {
                 ]
             });
         } catch (e) {
-            (newm.client as fiiClient).logger.error(
+            (newm.client as FiiClient).logger.error(
                 `Can't send logs in ${newm.guild.name} (${newm.guild.id}): ${e}`,
                 "messageUpdate"
             );
         }
     }
-};
-export default data;
+});
