@@ -47,16 +47,20 @@ export default class PingCommand extends BotInteraction {
     async runChatInputCommand(
         inter: ChatInputCommandInteraction
     ): Promise<void> {
+        if (!inter.guildId) return;
         if (inter.options.getSubcommand() === "enable") {
             const chan = inter.options.get("salon")?.channel;
 
-            await this.client.dbClient.set(`${inter.guildId}-logchan`, chan.id);
+            await this.client.dbClient?.set(
+                `${inter.guildId}-logchan`,
+                chan?.id
+            );
             inter.reply({
                 ephemeral: true,
-                content: `Nouveau canal de logs: ${chan.toString()}`
+                content: `Nouveau canal de logs: ${chan?.toString()}`
             });
         } else if (inter.options.getSubcommand() === "channel") {
-            const chan = await getLogChanID(this.client, inter.guild);
+            const chan = await getLogChanID(this.client, inter.guildId);
             if (!chan) {
                 inter.reply({
                     ephemeral: true,
@@ -69,12 +73,12 @@ export default class PingCommand extends BotInteraction {
                 });
             }
         } else {
-            const chan = await getLogChanID(this.client, inter.guild);
+            const chan = await getLogChanID(this.client, inter.guildId);
             if (!chan) {
                 await inter.reply("Aucun canal n'était défini!");
                 return;
             }
-            await this.client.dbClient.delete(`${inter.guildId}-logchan`);
+            await this.client.dbClient?.delete(`${inter.guildId}-logchan`);
             inter.reply({
                 ephemeral: true,
                 content: `Terminé. Le canal de logs était <#${chan}>`
