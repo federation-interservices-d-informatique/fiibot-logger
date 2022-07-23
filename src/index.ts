@@ -31,7 +31,7 @@ new FiiClient(
                 eventsPaths: [`${getDirname(import.meta.url)}/events`]
             }
         },
-        token: process.env.BOT_TOKEN
+        token: process.env.BOT_TOKEN ?? "invalid"
     },
     {
         dbConfig: {
