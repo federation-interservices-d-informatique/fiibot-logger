@@ -25,7 +25,7 @@ const sleep = async (time) => {
             await sleep(2500);
         }
     } while (error);
-    console.log("Conected!");
+    console.log("Connected!");
 
     process.exit(0);
 })();
