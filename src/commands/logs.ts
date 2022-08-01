@@ -48,6 +48,7 @@ export default class PingCommand extends BotInteraction {
         inter: ChatInputCommandInteraction
     ): Promise<void> {
         if (!inter.guildId) return;
+
         if (inter.options.getSubcommand() === "enable") {
             const chan = inter.options.get("salon")?.channel;
 
@@ -72,7 +73,7 @@ export default class PingCommand extends BotInteraction {
                     content: `Le canal de logs est <#${chan}>`
                 });
             }
-        } else {
+        } else if (inter.options.getSubcommand() === "disable") {
             const chan = await getLogChanID(this.client, inter.guildId);
             if (!chan) {
                 await inter.reply("Aucun canal n'était défini!");
