@@ -6,16 +6,16 @@ export default clientEvent({
     name: "logcreatedroles",
     type: "roleCreate",
     callback: async (role: Role): Promise<void> => {
-        sendLog(role.guild, {
+        await sendLog(role.guild, {
             title: "Un rôle a été créé!",
             description: `Le role ${role.name} a été créé!`,
             fields: [
                 {
-                    value: `\`\`\`${role.permissions.toArray()}\`\`\``,
+                    value: `\`\`\`${role.permissions.toArray().join('\n')}\`\`\``,
                     name: "Permissions:"
                 }
             ],
-            color: role.color,
+            color: role.colors.primaryColor,
             timestamp: new Date().toISOString()
         });
     }

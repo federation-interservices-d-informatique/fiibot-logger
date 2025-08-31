@@ -17,10 +17,11 @@ export default clientEvent({
             if (newm.partial) await newm.fetch();
             if (oldm.partial) await oldm.fetch();
         } catch (e) {
-            (oldm.client as FiiClient)?.logger.error(
-                `Failed to fetch messages!: ${e}`,
-                "MESSAGEEUPDATE"
-            );
+            if (e instanceof Error)
+                (oldm.client as FiiClient).logger.error(
+                    `Failed to fetch messages!: ${e}`,
+                    "MESSAGEEUPDATE"
+                );
             return;
         }
         if (!oldm.content || !newm.content) return;
@@ -34,20 +35,21 @@ export default clientEvent({
         if (checkFIIID(newm.content)) {
             if (newm.deletable)
                 try {
-                    newm.delete();
+                    await newm.delete();
                 } catch (e) {
-                    (oldm.client as FiiClient).logger.error(
-                        `Unable to delete ${newm.id} (${newm.content}, but it contains an ID!)`,
-                        "messageUpdate"
-                    );
+                if (e instanceof Error)
+                        (oldm.client as FiiClient).logger.error(
+                            `Unable to delete ${newm.id} (${newm.content}, but it contains an ID!)`,
+                            "messageUpdate"
+                        );
                 }
             return;
         }
-        sendLog(newm.guild, {
-            description: `**Un message de ${newm.author?.tag} (${newm.author?.id}) dans ${newm.channel} a été modifié**`,
+        await sendLog(newm.guild, {
+            description: `**Un message de ${newm.author?.tag ?? ""} (${newm.author?.id ?? ""}) dans ${newm.channel.toString()} a été modifié**`,
             color: Colors.Red,
             footer: {
-                icon_url: `${newm.guild.iconURL()}`,
+                icon_url: newm.guild.iconURL() ?? "",
                 text: `Logs de ${newm.guild.name}`
             },
             timestamp: new Date().toISOString(),

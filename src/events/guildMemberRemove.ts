@@ -8,12 +8,12 @@ export default clientEvent({
     callback: async (
         member: GuildMember | PartialGuildMember
     ): Promise<void> => {
-        if (member.user.partial) await member.user.fetch();
+        if (member.partial) await member.fetch();
 
         // Don't log fiibot leaves
-        if (member.user.id === member.client.user?.id) return;
+        if (member.user.id === member.client.user.id) return;
 
-        sendLog(member.guild, {
+        await sendLog(member.guild, {
             title: `Ohh... ${member.user.username} vient de quitter le serveur...`,
             color: Colors.Red,
             timestamp: new Date().toISOString(),

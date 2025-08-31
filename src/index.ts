@@ -10,7 +10,7 @@ new FiiClient(
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildMembers,
             GatewayIntentBits.MessageContent,
-            GatewayIntentBits.GuildBans,
+            GatewayIntentBits.GuildModeration,
             GatewayIntentBits.GuildMessages
         ],
         partials: [

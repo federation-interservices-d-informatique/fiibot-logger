@@ -14,8 +14,6 @@ export default clientEvent({
     name: "logunbans",
     type: "guildBanRemove",
     callback: async (ban: GuildBan): Promise<void> => {
-        if (ban.user.partial) await ban.user.fetch();
-
         let event:
             | GuildAuditLogsEntry<AuditLogEvent.MemberBanRemove>
             | undefined;
@@ -27,19 +25,20 @@ export default clientEvent({
             });
             event = log.entries.first();
         } catch (e) {
-            (ban.client as FiiClient).logger.error(
-                `Can't fetch audit logs of ${ban.guild.name} (${ban.guild.id}): ${e}`,
-                "guildBanRemove"
-            );
+            if (e instanceof Error)
+                (ban.client as FiiClient).logger.error(
+                    `Can't fetch audit logs of ${ban.guild.name} (${ban.guild.id}): ${e}`,
+                    "guildBanRemove"
+                );
         }
-        sendLog(ban.guild, {
+        await sendLog(ban.guild, {
             timestamp: new Date().toISOString(),
             title: "Sanctions",
             description: `Le bannissement de ${ban.user.tag}(${ban.user.id}) a été révoqué!`,
             fields: [
                 {
                     value: event?.executor?.tag
-                        ? `\`${event?.executor.tag} (${event.executor.id})\``
+                        ? `\`${event.executor.tag} (${event.executor.id})\``
                         : "Inconnu",
                     name: "Débanissement par:"
                 }

@@ -1,14 +1,14 @@
 import { clientEvent } from "@federation-interservices-d-informatique/fiibot-common";
-import { Colors, GuildMember } from "discord.js";
+import { Colors, GuildMember, PartialGuildMember } from "discord.js";
 import { sendLog } from "../utils/sendLogs.js";
 
 export default clientEvent({
     name: "lognewmembers",
     type: "guildMemberAdd",
-    callback: async (member: GuildMember): Promise<void> => {
+    callback: async (member: GuildMember | PartialGuildMember): Promise<void> => {
         if (member.partial) await member.fetch();
 
-        sendLog(member.guild, {
+        await sendLog(member.guild, {
             title: "Quelqu'un a rejoint le serveur!",
             description: `${member.user.username} a rejoint le serveur`,
             color: Colors.Green,

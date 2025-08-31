@@ -14,10 +14,11 @@ export const sendLog = async (guild: Guild | null, embed: APIEmbed) => {
                 embeds: [embed]
             });
         } catch (e) {
-            (guild.client as FiiClient).logger.error(
-                `Can't send logs in ${guild.name} (${guild.id}): ${e}`,
-                "sendLogs"
-            );
+            if (e instanceof Error)
+                (guild.client as FiiClient).logger.error(
+                    `Can't send logs in ${guild.name} (${guild.id}): ${e}`,
+                    "sendLogs"
+                );
         }
     }
 };

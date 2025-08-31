@@ -7,10 +7,10 @@ export default clientEvent({
     type: "roleUpdate",
     callback: async (old: Role, now: Role): Promise<void> => {
         const fields = [];
-        old.name != now.name &&
+        if(old.name != now.name)
             fields.push({ name: "Ancien nom:", value: `\`${old.name}\`` });
 
-        old.mentionable != now.mentionable &&
+        if (old.mentionable != now.mentionable)
             fields.push({
                 name: `Le role ${
                     old.mentionable
@@ -20,13 +20,13 @@ export default clientEvent({
                 value: "** **"
             });
 
-        old.hexColor != now.hexColor &&
+        if(old.hexColor != now.hexColor)
             fields.push({
                 name: "Le role à changé de couleur!",
                 value: `Ancienne: \`${old.hexColor}\`\nNouvelle: \`${now.hexColor}\``
             });
 
-        !old.permissions.equals(now.permissions) &&
+        if(!old.permissions.equals(now.permissions))
             fields.push({
                 name: "Le role à changé de permissions!",
                 value: `Anciennes:${
@@ -46,10 +46,10 @@ export default clientEvent({
                 }`
             });
 
-        sendLog(now.guild, {
+        await sendLog(now.guild, {
             title: "Un role a été modifié!",
             description: `Le role <@&${now.id}> a été modifié!`,
-            color: now.color,
+            color: now.colors.primaryColor,
             timestamp: new Date().toISOString(),
             fields: fields
         });

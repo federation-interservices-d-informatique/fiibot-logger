@@ -1,7 +1,8 @@
 import {
     ApplicationCommandOptionType,
     ChannelType,
-    ChatInputCommandInteraction
+    ChatInputCommandInteraction,
+    MessageFlags
 } from "discord.js";
 import {
     FiiClient,
@@ -56,20 +57,20 @@ export default class PingCommand extends BotInteraction {
                 `${inter.guildId}-logchan`,
                 chan?.id
             );
-            inter.reply({
-                ephemeral: true,
-                content: `Nouveau canal de logs: ${chan?.toString()}`
+            await inter.reply({
+                flags: MessageFlags.Ephemeral,
+                content: `Nouveau canal de logs: <#${chan?.id ?? ""}>`
             });
         } else if (inter.options.getSubcommand() === "channel") {
             const chan = await getLogChanID(this.client, inter.guildId);
             if (!chan) {
-                inter.reply({
-                    ephemeral: true,
+                await inter.reply({
+                    flags: MessageFlags.Ephemeral,
                     content: "Aucun canal de logs n'a été défini!"
                 });
             } else {
-                inter.reply({
-                    ephemeral: true,
+                await inter.reply({
+                    flags: MessageFlags.Ephemeral,
                     content: `Le canal de logs est <#${chan}>`
                 });
             }
@@ -80,8 +81,8 @@ export default class PingCommand extends BotInteraction {
                 return;
             }
             await this.client.dbClient?.delete(`${inter.guildId}-logchan`);
-            inter.reply({
-                ephemeral: true,
+            await inter.reply({
+                flags: MessageFlags.Ephemeral,
                 content: `Terminé. Le canal de logs était <#${chan}>`
             });
         }

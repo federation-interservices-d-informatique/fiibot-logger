@@ -11,12 +11,12 @@ export default clientEvent({
         // Check if the message contains an FII ID
         if (checkFIIID(msg.content)) return;
 
-        sendLog(msg.guild, {
-            description: `**Un message de ${msg.author.tag} (${msg.author.id}) dans ${msg.channel} a été supprimé**`,
+        await sendLog(msg.guild, {
+            description: `**Un message de ${msg.author.tag} (${msg.author.id}) dans ${msg.channel.toString()} a été supprimé**`,
             color: Colors.Red,
             footer: {
                 icon_url: msg.guild?.iconURL() ?? "",
-                text: `Logs de ${msg.guild?.name}`
+                text: `Logs de ${msg.guild?.name ?? ""}`
             },
             timestamp: new Date().toISOString(),
             fields: [
